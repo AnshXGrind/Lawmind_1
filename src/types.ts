@@ -1,7 +1,13 @@
+export type SubscriptionTier = 'Starter' | 'Advanced' | 'Premium' | 'Enterprise';
+
 export interface User {
   id: number;
   email: string;
   name: string;
+  subscription?: {
+    tier: SubscriptionTier;
+    expires_at?: string;
+  };
 }
 
 export interface Draft {

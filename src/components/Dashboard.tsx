@@ -98,10 +98,10 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
     .slice(0, 3);
 
   const stats = [
-    { label: 'Active Cases', value: '12', icon: Briefcase, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { label: 'Pending Drafts', value: drafts.length.toString(), icon: FileText, color: 'text-amber-500', bg: 'bg-amber-50' },
-    { label: 'Hearings', value: events.length.toString(), icon: Calendar, color: 'text-rose-500', bg: 'bg-rose-50' },
-    { label: 'Clients', value: '24', icon: Users, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { label: 'Active Matters', value: '12', icon: Briefcase, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Pending Instruments', value: drafts.length.toString(), icon: FileText, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Court Appearances', value: events.length.toString(), icon: Calendar, color: 'text-rose-600', bg: 'bg-rose-50' },
+    { label: 'Principals', value: '24', icon: Users, color: 'text-emerald-600', bg: 'bg-emerald-50' },
   ];
 
   return (
@@ -119,9 +119,9 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
               animate={{ opacity: 1, x: 0 }}
               className="text-3xl md:text-5xl font-serif font-bold text-slate-900 mb-2 md:mb-3"
             >
-              Good morning, <span className="text-gradient">Adv. {user.name}</span>
+              Salutations, <span className="text-gradient">Adv. {user.name}</span>
             </motion.h1>
-            <p className="text-slate-500 text-base md:text-lg">You have {upcomingEvents.length} hearings scheduled for this week.</p>
+            <p className="text-slate-500 text-base md:text-lg">You have {upcomingEvents.length} court appearances scheduled for this session.</p>
           </div>
           <div className="hidden md:flex gap-3 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
             {DRAFT_TYPES.slice(0, 3).map((type, idx) => (
@@ -131,7 +131,7 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.1 }}
                 onClick={() => onCreateNew(type)}
-                className="whitespace-nowrap bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-slate-800 transition-all text-sm flex items-center gap-2 shadow-xl shadow-slate-900/20"
+                className="whitespace-nowrap bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold hover:scale-105 transition-all text-sm flex items-center gap-2 shadow-xl shadow-indigo-600/20"
               >
                 <Plus className="w-4 h-4" />
                 {type}
@@ -149,12 +149,12 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="glass p-4 md:p-6 rounded-[24px] md:rounded-[32px] border-white/50"
+            className="glass p-4 md:p-6 rounded-[24px] md:rounded-[32px] border-slate-200"
           >
-            <div className={cn("w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 shadow-inner", stat.bg)}>
+            <div className={cn("w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 shadow-sm", stat.bg)}>
               <stat.icon className={cn("w-5 h-5 md:w-6 md:h-6", stat.color)} />
             </div>
-            <p className="text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-1">{stat.label}</p>
+            <p className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-1">{stat.label}</p>
             <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">{stat.value}</h3>
           </motion.div>
         ))}
@@ -167,17 +167,17 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass p-8 rounded-[40px] border-white/50"
+            className="glass p-8 rounded-[40px] border-slate-200"
           >
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-lg font-serif font-bold text-slate-900">Case Progress</h3>
-              <TrendingUp className="w-5 h-5 text-emerald-500" />
+              <h3 className="text-lg font-serif font-bold text-slate-900">Matter Trajectory</h3>
+              <TrendingUp className="w-5 h-5 text-emerald-600" />
             </div>
             <div className="space-y-6">
               {[
-                { label: 'Drafting', progress: 75, color: 'bg-blue-500' },
-                { label: 'Filing', progress: 40, color: 'bg-indigo-500' },
-                { label: 'Hearing', progress: 15, color: 'bg-rose-500' },
+                { label: 'Drafting', progress: 75, color: 'bg-blue-600' },
+                { label: 'Filing', progress: 40, color: 'bg-indigo-600' },
+                { label: 'Hearing', progress: 15, color: 'bg-rose-600' },
               ].map((item) => (
                 <div key={item.label}>
                   <div className="flex justify-between text-xs font-bold mb-2">
@@ -202,22 +202,22 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="glass p-8 rounded-[40px] border-white/50"
+            className="glass p-8 rounded-[40px] border-slate-200"
           >
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-lg font-serif font-bold text-slate-900">Upcoming hearings</h3>
+              <h3 className="text-lg font-serif font-bold text-slate-900">Forthcoming Appearances</h3>
               <button className="text-xs font-bold text-indigo-600 hover:underline">View All</button>
             </div>
             <div className="space-y-4">
               {upcomingEvents.length > 0 ? upcomingEvents.map(event => (
-                <div key={event.id} className="flex gap-4 p-4 bg-white/50 rounded-3xl border border-white/50 hover:bg-white transition-colors cursor-pointer group">
-                  <div className="w-12 h-12 bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                <div key={event.id} className="flex gap-4 p-4 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-lg hover:border-indigo-100 transition-all cursor-pointer group">
+                  <div className="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex flex-col items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
                     <span className="text-[10px] font-bold uppercase">{format(new Date(event.event_date), 'MMM')}</span>
                     <span className="text-lg font-bold leading-none">{format(new Date(event.event_date), 'd')}</span>
                   </div>
                   <div>
                     <p className="text-sm font-bold text-slate-900 line-clamp-1">{event.title}</p>
-                    <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                    <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       10:30 AM • Court Room 4
                     </p>
@@ -240,8 +240,8 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search your legal drafts..."
-                className="w-full pl-14 pr-6 py-4 glass rounded-[24px] md:rounded-3xl focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 outline-none transition-all text-base md:text-lg"
+                placeholder="Search Legal Instruments..."
+                className="w-full pl-14 pr-6 py-4 glass rounded-[24px] md:rounded-3xl focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 outline-none transition-all text-base md:text-lg text-slate-900 placeholder:text-slate-400"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -254,8 +254,8 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                   className={cn(
                     "whitespace-nowrap px-5 md:px-6 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-xs md:text-sm font-bold transition-all",
                     filter === t 
-                      ? "bg-slate-900 text-white shadow-lg shadow-slate-900/20" 
-                      : "bg-white text-slate-500 hover:bg-slate-50 border border-slate-100"
+                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20" 
+                      : "bg-white text-slate-500 hover:bg-slate-50 border border-slate-200"
                   )}
                 >
                   {t}
@@ -266,8 +266,8 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
 
           {loading ? (
             <div className="flex flex-col items-center justify-center py-32">
-              <div className="w-16 h-16 border-4 border-slate-100 border-t-slate-900 rounded-full animate-spin mb-4" />
-              <p className="text-slate-400 font-medium">Loading your legal archive...</p>
+              <div className="w-16 h-16 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin mb-4" />
+              <p className="text-slate-500 font-medium">Retrieving Legal Archive...</p>
             </div>
           ) : filteredDrafts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -278,9 +278,9 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                     onClick={() => onSelectDraft(draft)}
                     className="group"
                   >
-                    <div className="glass p-8 rounded-[40px] border-white/50 h-full flex flex-col relative overflow-hidden dark:bg-black/40">
+                    <div className="glass p-8 rounded-[40px] border-slate-200 h-full flex flex-col relative overflow-hidden bg-white hover:shadow-2xl hover:border-indigo-100 transition-all">
                       <div className="flex items-start justify-between mb-6 relative z-10">
-                        <div className="p-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-2xl shadow-xl shadow-slate-900/20 group-hover:rotate-12 transition-transform">
+                        <div className="p-4 bg-indigo-600 text-white rounded-2xl shadow-xl shadow-indigo-600/20 group-hover:rotate-12 transition-transform">
                           <FileText className="w-6 h-6" />
                         </div>
                         <div className="flex items-center gap-1">
@@ -292,8 +292,8 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                             className={cn(
                               "p-2 rounded-xl transition-all",
                               savedItems.find(i => i.id === draft.id) 
-                                ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30" 
-                                : "text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
+                                ? "text-indigo-600 bg-indigo-50" 
+                                : "text-slate-300 hover:text-indigo-600 hover:bg-indigo-50"
                             )}
                             title="Save for Later"
                           >
@@ -310,9 +310,9 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                       </div>
                       
                       <div className="relative z-10">
-                        <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">{draft.title}</h3>
+                        <h3 className="text-xl font-serif font-bold text-slate-900 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">{draft.title}</h3>
                         <div className="flex items-center gap-4 text-xs font-bold">
-                          <span className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full uppercase tracking-tighter">
+                          <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full uppercase tracking-tighter">
                             {draft.type}
                           </span>
                           <span className="flex items-center gap-1 text-slate-400">
@@ -328,7 +328,7 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                             e.stopPropagation();
                             alert("Opening research for this draft...");
                           }}
-                          className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest hover:underline"
+                          className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 uppercase tracking-widest hover:underline"
                         >
                           <Sparkles className="w-3 h-3" />
                           Research Clauses
@@ -337,7 +337,7 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
                       </div>
 
                       {/* Decorative background element */}
-                      <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-slate-50 dark:bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700 -z-0" />
+                      <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-slate-50 rounded-full group-hover:scale-150 transition-transform duration-700 -z-0" />
                     </div>
                   </InteractiveCard>
                 ))}
@@ -347,18 +347,18 @@ export default function Dashboard({ user, onSelectDraft, onCreateNew, onSaveLate
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="glass rounded-[40px] border-dashed border-slate-200 py-24 text-center"
+              className="glass rounded-[40px] border-dashed border-slate-200 py-24 text-center bg-white"
             >
               <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Scale className="text-slate-200 w-12 h-12" />
               </div>
-              <h3 className="text-2xl font-serif font-bold text-slate-900 mb-3">Your archive is empty</h3>
-              <p className="text-slate-500 mb-10 max-w-sm mx-auto">Start drafting your first professional legal document with AI assistance.</p>
+              <h3 className="text-2xl font-serif font-bold text-slate-900 mb-3">The Repository is Void</h3>
+              <p className="text-slate-500 mb-10 max-w-sm mx-auto">Initiate your first professional legal instrument with AI assistance.</p>
               <button 
                 onClick={() => onCreateNew('Petition')}
-                className="bg-slate-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20"
+                className="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-bold hover:scale-105 transition-all shadow-2xl shadow-indigo-600/20"
               >
-                Create New Draft
+                Initiate Instrument
               </button>
             </motion.div>
           )}

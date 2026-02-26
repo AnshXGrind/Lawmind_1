@@ -60,7 +60,7 @@ export default function Auth({ onAuth }: AuthProps) {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-serif font-bold text-center text-slate-900 mb-4"
           >
-            {isLogin ? 'Welcome Back' : 'Join LawMind'}
+            {isLogin ? 'Counsel Authentication' : 'Establish Legal Credentials'}
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
@@ -68,7 +68,7 @@ export default function Auth({ onAuth }: AuthProps) {
             transition={{ delay: 0.1 }}
             className="text-slate-500 text-center text-lg font-medium max-w-sm"
           >
-            {isLogin ? 'Access your premium legal drafting suite' : 'Start generating professional legal drafts with AI'}
+            {isLogin ? 'Access your professional jurisprudential drafting suite' : 'Initiate professional legal instrument formulation via AI'}
           </motion.p>
         </div>
 
@@ -139,7 +139,7 @@ export default function Auth({ onAuth }: AuthProps) {
               <Loader2 className="w-6 h-6 animate-spin" />
             ) : (
               <>
-                {isLogin ? 'Sign In' : 'Create Account'}
+                {isLogin ? 'Authenticate' : 'Register Credentials'}
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </>
             )}
@@ -151,7 +151,7 @@ export default function Auth({ onAuth }: AuthProps) {
             onClick={() => setIsLogin(!isLogin)}
             className="text-slate-500 hover:text-slate-900 font-bold transition-colors text-lg"
           >
-            {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+            {isLogin ? "Lacking credentials? Register here" : "Existing credentials? Authenticate here"}
           </button>
         </div>
 

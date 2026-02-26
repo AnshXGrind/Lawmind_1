@@ -1,4 +1,6 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
+import { legalQAPrompt, documentAnalysisPrompt, ragAugmentedPrompt } from "../lib/prompts";
+import { queryVectorStore } from "../lib/vector-store";
 
 const SYSTEM_INSTRUCTION = `You are LawMind, an expert AI legal drafting assistant for Indian lawyers. 
 Your goal is to generate professionally formatted legal documents following Indian court standards (District Courts, High Courts, and Supreme Court of India).
@@ -18,15 +20,111 @@ Key Guidelines:
 
 Output should be in Markdown format.`;
 
-export async function generateLegalDraft(prompt: string, type: string) {
+export async function generateLegalDraft(prompt: string, type: string, onChunk?: (chunk: string) => void) {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
   
+  if (onChunk) {
+    const response = await ai.models.generateContentStream({
+      model: "gemini-3-flash-preview",
+      contents: `Draft a ${type} based on the following information: ${prompt}`,
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION,
+        temperature: 0.7,
+      },
+    });
+
+    let fullText = "";
+    for await (const chunk of response) {
+      const text = (chunk as GenerateContentResponse).text || "";
+      fullText += text;
+      onChunk(text);
+    }
+    return fullText;
+  }
+
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: `Draft a ${type} based on the following information: ${prompt}`,
     config: {
       systemInstruction: SYSTEM_INSTRUCTION,
       temperature: 0.7,
+    },
+  });
+
+  return response.text;
+}
+
+export async function askLegalQuestion(question: string, jurisdiction: string = "Indian", onChunk?: (chunk: string) => void) {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+  
+  // RAG: Query vector store for context
+  const contextResults = await queryVectorStore(question);
+  const contextText = contextResults.map(r => r.text).join('\n\n');
+  
+  const prompt = contextText 
+    ? ragAugmentedPrompt(question, contextText)
+    : legalQAPrompt(question, jurisdiction);
+
+  if (onChunk) {
+    const response = await ai.models.generateContentStream({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+      config: {
+        systemInstruction: "You are a legal expert assistant.",
+        temperature: 0.3,
+      },
+    });
+
+    let fullText = "";
+    for await (const chunk of response) {
+      const text = (chunk as GenerateContentResponse).text || "";
+      fullText += text;
+      onChunk(text);
+    }
+    return fullText;
+  }
+
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: prompt,
+    config: {
+      systemInstruction: "You are a legal expert assistant.",
+      temperature: 0.3,
+    },
+  });
+
+  return response.text;
+}
+
+export async function analyzeDocument(documentText: string, onChunk?: (chunk: string) => void) {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+  const prompt = documentAnalysisPrompt(documentText);
+
+  if (onChunk) {
+    const response = await ai.models.generateContentStream({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+      config: {
+        systemInstruction: "You are a senior legal analyst.",
+        temperature: 0.2,
+      },
+    });
+
+    let fullText = "";
+    for await (const chunk of response) {
+      const text = (chunk as GenerateContentResponse).text || "";
+      fullText += text;
+      onChunk(text);
+    }
+    return fullText;
+  }
+
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: prompt,
+    config: {
+      systemInstruction: "You are a senior legal analyst.",
+      temperature: 0.2,
     },
   });
 

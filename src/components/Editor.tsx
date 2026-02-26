@@ -156,33 +156,33 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
 
   return (
     <div className={cn(
-      "h-full flex flex-col bg-[#F8F9FA] dark:bg-black transition-all duration-500",
+      "h-full flex flex-col bg-slate-50 transition-all duration-500",
       isFullscreen && "fixed inset-0 z-[100] p-0"
     )}>
       {/* Editor Header */}
-      <header className="h-16 md:h-20 glass border-b-0 px-4 md:px-10 flex items-center justify-between shrink-0 sticky top-0 z-40">
+      <header className="h-16 md:h-20 glass border-b border-slate-200 px-4 md:px-10 flex items-center justify-between shrink-0 sticky top-0 z-40">
         <div className="flex items-center gap-3 md:gap-6 flex-1 min-w-0">
           <motion.button 
             whileHover={{ x: -3 }}
             onClick={onBack}
-            className="p-2 md:p-3 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl md:rounded-2xl transition-colors text-slate-500 dark:text-slate-400 shrink-0"
+            className="p-2 md:p-3 hover:bg-slate-100 rounded-xl md:rounded-2xl transition-colors text-slate-400 shrink-0"
           >
             <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </motion.button>
-          <div className="h-6 md:h-8 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
+          <div className="h-6 md:h-8 w-px bg-slate-200 hidden sm:block" />
           <div className="flex flex-col min-w-0 flex-1">
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-base md:text-xl font-serif font-bold text-slate-900 dark:text-white p-0 placeholder:text-slate-300 dark:placeholder:text-slate-600 w-full truncate"
-              placeholder="Case Title / Document Name"
+              className="bg-transparent border-none focus:ring-0 text-base md:text-xl font-serif font-bold text-slate-900 p-0 placeholder:text-slate-400 w-full truncate"
+              placeholder="Matter Title / Instrument Designation"
             />
             <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 px-1.5 md:px-2 py-0.5 rounded-md">
+              <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-1.5 md:px-2 py-0.5 rounded-md">
                 {initialType || draft?.type || 'Petition'}
               </span>
-              <span className="text-[8px] md:text-[10px] font-medium text-slate-400 dark:text-slate-500 truncate hidden xs:block">Drafting Assistant Active</span>
+              <span className="text-[8px] md:text-[10px] font-medium text-slate-500 truncate hidden xs:block">Instrument Assistant Active</span>
             </div>
           </div>
         </div>
@@ -193,28 +193,28 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
               onClick={() => onSaveLater({ id: draft?.id || Date.now(), title, content, type: initialType || draft?.type || 'Draft' })}
               className={cn(
                 "p-3 rounded-2xl transition-colors",
-                isSaved ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30" : "hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 dark:text-slate-400"
+                isSaved ? "text-indigo-600 bg-indigo-50" : "hover:bg-slate-100 text-slate-400"
               )}
               title={isSaved ? "Saved to Collection" : "Save for Later"}
             >
               {isSaved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
             </button>
-            <button className="p-3 hover:bg-slate-100 dark:hover:bg-white/10 rounded-2xl transition-colors text-slate-500 dark:text-slate-400" title="History">
+            <button className="p-3 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400" title="History">
               <History className="w-5 h-5" />
             </button>
-            <button className="p-3 hover:bg-slate-100 dark:hover:bg-white/10 rounded-2xl transition-colors text-slate-500 dark:text-slate-400" title="Share">
+            <button className="p-3 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400" title="Share">
               <Share2 className="w-5 h-5" />
             </button>
             <button 
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-3 hover:bg-slate-100 dark:hover:bg-white/10 rounded-2xl transition-colors text-slate-500 dark:text-slate-400"
+              className="p-3 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400"
             >
               {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
             </button>
           </div>
           <button
             onClick={handleExportPDF}
-            className="hidden sm:flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-white dark:bg-black border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 rounded-xl md:rounded-2xl font-bold hover:bg-slate-50 dark:hover:bg-white/5 transition-all text-xs md:text-sm shadow-sm"
+            className="hidden sm:flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-white border border-slate-200 text-slate-600 rounded-xl md:rounded-2xl font-bold hover:bg-slate-50 transition-all text-xs md:text-sm shadow-sm"
           >
             <Download className="w-4 h-4" />
             <span className="hidden md:inline">Export</span>
@@ -222,7 +222,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-2 px-4 md:px-8 py-2 md:py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl md:rounded-2xl font-bold hover:bg-slate-800 dark:hover:bg-slate-100 transition-all text-xs md:text-sm shadow-xl shadow-slate-900/20 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 md:px-8 py-2 md:py-3 bg-indigo-600 text-white rounded-xl md:rounded-2xl font-bold hover:scale-105 transition-all text-xs md:text-sm shadow-xl shadow-indigo-600/20 disabled:opacity-50"
           >
             {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             <span>Save</span>
@@ -237,7 +237,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass p-3 md:p-4 rounded-[24px] md:rounded-[32px] border-white/50 flex items-center gap-2 md:gap-4 shadow-2xl shadow-indigo-500/5"
+            className="glass p-3 md:p-4 rounded-[24px] md:rounded-[32px] border-slate-200 flex items-center gap-2 md:gap-4 shadow-2xl shadow-indigo-500/5"
           >
             <div className="p-2 md:p-3 bg-indigo-50 text-indigo-600 rounded-xl md:rounded-2xl hidden xs:block">
               <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
@@ -246,13 +246,13 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
               type="text"
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
-              placeholder="Describe the case details..."
-              className="flex-1 bg-transparent border-none focus:ring-0 text-sm md:text-base text-slate-900 dark:text-white placeholder:text-slate-400 font-medium min-w-0"
+              placeholder="Elucidate the matter specifics..."
+              className="flex-1 bg-transparent border-none focus:ring-0 text-sm md:text-base text-slate-900 placeholder:text-slate-400 font-medium min-w-0"
             />
             <div className="flex items-center gap-1 md:gap-2">
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="p-2 md:p-3 bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 rounded-xl md:rounded-2xl hover:bg-slate-200 dark:hover:bg-white/20 transition-all"
+                className="p-2 md:p-3 bg-slate-100 text-slate-500 rounded-xl md:rounded-2xl hover:bg-slate-200 transition-all"
                 title="Upload Document (OCR)"
               >
                 {ocrLoading ? <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" /> : <Upload className="w-4 h-4 md:w-5 md:h-5" />}
@@ -263,7 +263,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                 onClick={toggleListening}
                 className={cn(
                   "p-2 md:p-3 rounded-xl md:rounded-2xl transition-all",
-                  isListening ? "bg-rose-500 text-white animate-pulse" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                  isListening ? "bg-rose-500 text-white animate-pulse" : "bg-slate-100 text-slate-400 hover:bg-slate-200"
                 )}
               >
                 {isListening ? <Mic className="w-4 h-4 md:w-5 md:h-5" /> : <MicOff className="w-4 h-4 md:w-5 md:h-5" />}
@@ -275,14 +275,14 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                 className="bg-indigo-600 text-white px-4 md:px-8 py-2 md:py-3 rounded-xl md:rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 disabled:opacity-50 flex items-center gap-2 text-xs md:text-sm"
               >
                 {isGenerating ? <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" /> : <Sparkles className="w-3 h-3 md:w-4 md:h-4" />}
-                <span className="hidden xs:inline">Draft</span>
+                <span className="hidden xs:inline">Initiate</span>
               </button>
             </div>
           </motion.div>
 
           {/* Tab Switcher & Analysis Toggle */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <div className="flex p-1 bg-slate-200/50 rounded-xl md:rounded-2xl border border-slate-200/50">
+            <div className="flex p-1 bg-slate-100 rounded-xl md:rounded-2xl border border-slate-200">
               <button
                 onClick={() => setActiveTab('edit')}
                 className={cn(
@@ -312,7 +312,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                 "flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all shadow-sm border",
                 showIntelligence 
                   ? "bg-amber-500 text-white border-amber-600" 
-                  : "bg-white text-amber-600 border-amber-100 hover:bg-amber-50"
+                  : "bg-white text-amber-600 border-amber-200 hover:bg-amber-50"
               )}
             >
               {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertCircle className="w-4 h-4" />}
@@ -329,7 +329,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="glass p-6 rounded-[32px] border-amber-200/50 bg-amber-50/30 relative">
+                <div className="glass p-6 rounded-[32px] border-amber-200 bg-amber-50 relative">
                   <button 
                     onClick={() => setShowIntelligence(false)}
                     className="absolute top-4 right-4 p-2 hover:bg-amber-100 rounded-full transition-colors text-amber-600"
@@ -340,23 +340,23 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                     <div className="p-2 bg-amber-100 text-amber-600 rounded-xl">
                       <AlertCircle className="w-5 h-5" />
                     </div>
-                    <h3 className="text-lg font-serif font-bold text-slate-900">AI Intelligence Report</h3>
+                    <h3 className="text-lg font-serif font-bold text-slate-900">AI Jurisprudential Report</h3>
                   </div>
                   <div className="max-h-80 overflow-y-auto pr-2 custom-scrollbar">
                     {isAnalyzing ? (
                       <div className="flex flex-col items-center py-8">
-                        <Loader2 className="w-8 h-8 animate-spin text-amber-300 mb-2" />
-                        <p className="text-xs text-amber-600 font-medium">Analyzing legal context...</p>
+                        <Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-2" />
+                        <p className="text-xs text-amber-700 font-medium">Analyzing legal context...</p>
                       </div>
                     ) : suggestions ? (
                       <div className="space-y-3">
                         {parseSuggestions(suggestions).map((section, idx) => (
-                          <div key={idx} className="bg-white/50 border border-amber-100 rounded-2xl overflow-hidden transition-all">
+                          <div key={idx} className="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all shadow-sm">
                             <button
                               onClick={() => toggleSection(idx)}
-                              className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-amber-100/50 transition-colors"
+                              className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
                             >
-                              <span className="text-sm font-bold text-slate-800">{section.title}</span>
+                              <span className="text-sm font-bold text-slate-900">{section.title}</span>
                               <ChevronDown className={cn(
                                 "w-4 h-4 text-amber-600 transition-transform duration-300",
                                 expandedSections.includes(idx) && "rotate-180"
@@ -374,6 +374,23 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                                     <div className="markdown-body text-xs prose-sm text-slate-600 leading-relaxed">
                                       <ReactMarkdown remarkPlugins={[remarkGfm]}>{section.content}</ReactMarkdown>
                                     </div>
+                                    {section.content.includes('http') && (
+                                      <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+                                        <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest w-full mb-1">References & Citations</p>
+                                        {Array.from(section.content.matchAll(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g)).map((match, i) => (
+                                          <a 
+                                            key={i}
+                                            href={match[2]}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                                          >
+                                            <Search className="w-3 h-3 text-amber-600" />
+                                            {match[1]}
+                                          </a>
+                                        ))}
+                                      </div>
+                                    )}
                                   </div>
                                 </motion.div>
                               )}
@@ -382,7 +399,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-400 italic">No analysis available. Try analyzing the content again.</p>
+                      <p className="text-sm text-slate-500 italic">No analysis available. Try analyzing the content again.</p>
                     )}
                   </div>
                 </div>
@@ -406,7 +423,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                     ref={editorRef}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full h-full glass p-6 md:p-10 rounded-[24px] md:rounded-[40px] border-white/50 focus:ring-0 outline-none resize-none font-mono text-sm md:text-base text-slate-700 dark:text-slate-300 leading-relaxed shadow-2xl shadow-black/5 dark:bg-black/40"
+                    className="w-full h-full glass p-6 md:p-10 rounded-[24px] md:rounded-[40px] border-slate-200 focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 outline-none resize-none font-mono text-sm md:text-base text-slate-700 leading-relaxed shadow-2xl shadow-slate-200/20 bg-white"
                     placeholder="Document content will appear here..."
                   />
                 </motion.div>
@@ -417,7 +434,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                   animate={{ opacity: 1, rotateY: 0 }}
                   exit={{ opacity: 0, rotateY: -10 }}
                   transition={{ type: "spring", damping: 20 }}
-                  className="h-full glass p-6 md:p-10 rounded-[24px] md:rounded-[40px] border-white/50 overflow-y-auto shadow-2xl shadow-black/5 bg-white/90 dark:bg-black/80"
+                  className="h-full glass p-6 md:p-10 rounded-[24px] md:rounded-[40px] border-slate-200 overflow-y-auto shadow-2xl shadow-slate-200/20 bg-white"
                 >
                   <div className="max-w-3xl mx-auto py-4 md:py-10">
                     <div className="markdown-body text-sm md:text-base">
@@ -436,7 +453,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="glass p-8 rounded-[40px] border-white/50 flex flex-col"
+            className="glass p-8 rounded-[40px] border-slate-200 bg-white shadow-xl flex flex-col"
           >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -465,9 +482,9 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                     <div key={idx} className="bg-slate-50 border border-slate-100 rounded-xl overflow-hidden transition-all">
                       <button
                         onClick={() => toggleSection(idx + 100)} // Offset to avoid conflict with main panel
-                        className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-slate-100 transition-colors"
+                        className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-white transition-colors"
                       >
-                        <span className="text-xs font-bold text-slate-700">{section.title}</span>
+                        <span className="text-xs font-bold text-slate-900">{section.title}</span>
                         <ChevronDown className={cn(
                           "w-3 h-3 text-slate-400 transition-transform duration-300",
                           expandedSections.includes(idx + 100) && "rotate-180"
@@ -482,7 +499,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                             className="overflow-hidden"
                           >
                             <div className="px-4 pb-4 pt-0">
-                              <div className="markdown-body text-[10px] prose-sm text-slate-500 leading-relaxed">
+                              <div className="markdown-body text-[10px] prose-sm text-slate-600 leading-relaxed">
                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{section.content}</ReactMarkdown>
                               </div>
                             </div>
@@ -493,7 +510,7 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-slate-400 italic">Generate a draft to see relevant legal sections.</p>
+                <p className="text-sm text-slate-500 italic">Initiate a draft to see relevant legal sections.</p>
               )}
             </div>
           </motion.div>
@@ -503,13 +520,13 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="glass p-8 rounded-[40px] border-white/50 flex-1"
+            className="glass p-8 rounded-[40px] border-slate-200 bg-white shadow-xl flex-1"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-serif font-bold text-slate-900">Drafting Tips</h3>
+              <h3 className="text-lg font-serif font-bold text-slate-900">Instrument Protocols</h3>
             </div>
             <ul className="space-y-4">
               {[
@@ -518,15 +535,15 @@ export default function Editor({ user, draft, initialType, onBack, onSaveLater, 
                 "Verify AI suggestions with gazettes",
                 "Ensure proper formatting for filing"
               ].map((tip, i) => (
-                <li key={i} className="flex gap-3 text-sm text-slate-500 font-medium">
-                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full mt-2 shrink-0" />
+                <li key={i} className="flex gap-3 text-sm text-slate-600 font-medium">
+                  <div className="w-1.5 h-1.5 bg-indigo-600 rounded-full mt-2 shrink-0" />
                   {tip}
                 </li>
               ))}
             </ul>
             <button 
               onClick={() => alert("Use the 'Research' tab for in-depth precedents.")}
-              className="w-full mt-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10"
+              className="w-full mt-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/20"
             >
               <Search className="w-4 h-4" />
               Clause Research

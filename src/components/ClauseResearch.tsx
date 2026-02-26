@@ -77,16 +77,16 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-3 mb-4"
             >
-              <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                Legal Intelligence
+              <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                Jurisprudential Intelligence
               </span>
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-3xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white leading-tight"
+              className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-tight"
             >
-              Clause <span className="text-indigo-600 dark:text-indigo-400 italic">Research</span>
+              Precedents & <span className="text-indigo-600 italic">Clauses</span>
             </motion.h1>
           </div>
 
@@ -99,18 +99,18 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-indigo-500 transition-colors" />
               <input
                 type="text"
-                placeholder="Search legal clauses, topics or precedents..."
-                className="w-full pl-14 pr-32 py-4 glass rounded-2xl border-white/50 dark:border-white/10 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-base font-medium placeholder:text-slate-400 dark:placeholder:text-slate-600 dark:text-white"
+                placeholder="Search legal clauses, jurisprudential topics or precedents..."
+                className="w-full pl-14 pr-32 py-4 bg-white rounded-2xl border-slate-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-base font-medium placeholder:text-slate-400 text-slate-900 shadow-xl"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
               <button
                 type="submit"
                 disabled={loading || !query}
-                className="absolute right-2 top-2 bottom-2 bg-slate-900 dark:bg-white text-white dark:text-black px-6 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-slate-100 transition-all flex items-center gap-2 disabled:opacity-50 text-sm"
+                className="absolute right-2 top-2 bottom-2 bg-indigo-600 text-white px-6 rounded-xl font-bold hover:scale-[1.02] transition-all flex items-center gap-2 disabled:opacity-50 text-sm shadow-lg shadow-indigo-600/20"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                <span>Research</span>
+                <span>Investigate</span>
               </button>
             </form>
           </motion.div>
@@ -123,9 +123,9 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="glass p-8 rounded-[40px] border-white/50 dark:border-white/10"
+            className="glass p-8 rounded-[40px] border-slate-200 bg-white shadow-xl"
           >
-            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Quick Topics</p>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Expedited Matters</p>
             <div className="grid grid-cols-1 gap-3">
               {QUICK_TOPICS.map((topic, i) => (
                 <button
@@ -134,12 +134,12 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
                     setQuery(topic.title);
                     handleSearch(undefined, topic.title);
                   }}
-                  className="flex items-center gap-4 p-4 bg-white/40 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 rounded-2xl border border-white/50 dark:border-white/10 transition-all text-left group"
+                  className="flex items-center gap-4 p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all text-left group"
                 >
-                  <div className={cn("p-2.5 rounded-xl transition-transform group-hover:scale-110", topic.color)}>
+                  <div className={cn("p-2.5 rounded-xl transition-transform group-hover:scale-110", topic.color.split(' dark:')[0])}>
                     <topic.icon className="w-5 h-5" />
                   </div>
-                  <span className="font-bold text-sm text-slate-700 dark:text-slate-300">{topic.title}</span>
+                  <span className="font-bold text-sm text-slate-700">{topic.title}</span>
                 </button>
               ))}
             </div>
@@ -150,9 +150,9 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="glass p-8 rounded-[40px] border-white/50 dark:border-white/10"
+              className="glass p-8 rounded-[40px] border-slate-200 bg-white shadow-xl"
             >
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Contextual Research</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Contextual Jurisprudence</p>
               <div className="space-y-3">
                 {recentDrafts.map((draft) => (
                   <button
@@ -161,15 +161,15 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
                       setQuery(`Analyze and suggest clauses for: ${draft.title}`);
                       handleSearch(undefined, `Based on this draft title "${draft.title}", suggest 3 critical legal clauses that should be included.`);
                     }}
-                    className="w-full flex items-center justify-between p-4 bg-white/40 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 rounded-2xl border border-white/50 dark:border-white/10 transition-all text-left group"
+                    className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all text-left group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-slate-100 dark:bg-white/10 rounded-lg text-slate-500 dark:text-slate-400">
+                      <div className="p-2 bg-white rounded-lg text-slate-400 shadow-sm">
                         <FileText className="w-4 h-4" />
                       </div>
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 truncate max-w-[150px]">{draft.title}</span>
+                      <span className="text-xs font-bold text-slate-700 truncate max-w-[150px]">{draft.title}</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
                   </button>
                 ))}
               </div>
@@ -186,53 +186,53 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex flex-col items-center justify-center py-32 glass rounded-[40px] border-white/50 dark:border-white/10 h-full"
+                className="flex flex-col items-center justify-center py-32 glass rounded-[40px] border-slate-200 bg-white shadow-xl h-full"
               >
                 <div className="relative">
-                  <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-900/20 rounded-full flex items-center justify-center mb-8 animate-pulse">
-                    <Scale className="w-10 h-10 text-indigo-300" />
+                  <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-8 animate-pulse">
+                    <Scale className="w-10 h-10 text-indigo-600" />
                   </div>
-                  <div className="absolute inset-0 border-4 border-indigo-100 dark:border-indigo-900/30 border-t-indigo-500 rounded-full animate-spin" />
+                  <div className="absolute inset-0 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
                 </div>
-                <p className="text-slate-500 dark:text-slate-400 text-lg font-serif italic animate-pulse">Consulting legal precedents...</p>
+                <p className="text-slate-500 text-lg font-serif italic animate-pulse">Consulting jurisprudential precedents...</p>
               </motion.div>
             ) : results ? (
               <motion.div
                 key="results"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass rounded-[40px] border-white/50 dark:border-white/10 shadow-2xl shadow-black/5 overflow-hidden h-full flex flex-col"
+                className="glass rounded-[40px] border-slate-200 bg-white shadow-2xl overflow-hidden h-full flex flex-col"
               >
-                <div className="p-8 border-b border-white/50 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white/30 dark:bg-black/40">
+                <div className="p-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-indigo-600 text-white rounded-2xl shadow-xl shadow-indigo-600/20">
                       <BookOpen className="w-6 h-6" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-serif font-bold text-slate-900 dark:text-white">Research Findings</h2>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Found relevant clauses and citations</p>
+                      <h2 className="text-xl font-serif font-bold text-slate-900">Jurisprudential Findings</h2>
+                      <p className="text-xs text-slate-500 font-medium mt-1">Found relevant clauses and citations</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleSaveResult}
-                      className="p-3 bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-all shadow-sm"
-                      title="Save to Collection"
+                      className="p-3 bg-white border border-slate-200 rounded-xl text-slate-500 hover:bg-slate-50 transition-all shadow-sm"
+                      title="Save to Repository"
                     >
                       <Bookmark className="w-5 h-5" />
                     </button>
                     <button
                       onClick={copyToClipboard}
-                      className="flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold text-sm hover:bg-slate-800 dark:hover:bg-slate-100 transition-all shadow-sm"
+                      className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:scale-[1.02] transition-all shadow-lg shadow-indigo-600/20"
                     >
-                      {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                      {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                       {copied ? 'Copied' : 'Copy All'}
                     </button>
                   </div>
                 </div>
-                <div className="p-8 md:p-12 bg-white/80 dark:bg-black/60 flex-1 overflow-y-auto custom-scrollbar">
+                <div className="p-8 md:p-12 bg-white flex-1 overflow-y-auto custom-scrollbar">
                   <div className="max-w-3xl mx-auto">
-                    <div className="markdown-body">
+                    <div className="markdown-body text-slate-600">
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>{results}</ReactMarkdown>
                     </div>
                   </div>
@@ -243,13 +243,13 @@ export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: Cla
                 key="empty"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="glass rounded-[40px] border-white/50 dark:border-white/10 border-dashed py-32 text-center h-full flex flex-col items-center justify-center"
+                className="glass rounded-[40px] border-slate-200 border-dashed border-2 py-32 text-center h-full flex flex-col items-center justify-center bg-slate-50/50"
               >
-                <div className="w-24 h-24 bg-slate-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-8">
-                  <Scale className="w-12 h-12 text-slate-200 dark:text-white/10" />
+                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8 shadow-sm">
+                  <Scale className="w-12 h-12 text-slate-200" />
                 </div>
-                <h3 className="text-2xl font-serif font-bold text-slate-400 dark:text-slate-600">Ready to Research</h3>
-                <p className="text-slate-400 dark:text-slate-500 mt-2 max-w-xs mx-auto">Enter a legal topic or select a quick topic from the sidebar to begin your research.</p>
+                <h3 className="text-2xl font-serif font-bold text-slate-400">Prepared for Investigation</h3>
+                <p className="text-slate-400 mt-2 max-w-xs mx-auto">Submit a jurisprudential topic or select an expedited matter from the sidebar to initiate investigation.</p>
               </motion.div>
             )}
           </AnimatePresence>
