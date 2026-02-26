@@ -1,0 +1,260 @@
+import React, { useState, useEffect } from 'react';
+import { researchLegalClauses } from '../services/gemini';
+import { Search, Sparkles, Copy, Check, BookOpen, Scale, Loader2, AlertCircle, TrendingUp, Shield, Gavel, History, FileText, ChevronRight, Bookmark } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { motion, AnimatePresence } from 'motion/react';
+import { cn } from '../lib/utils';
+import { api } from '../services/api';
+import { Draft, User } from '../types';
+
+const QUICK_TOPICS = [
+  { title: "Force Majeure", icon: Shield, color: "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" },
+  { title: "Arbitration", icon: Gavel, color: "bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" },
+  { title: "Bail Grounds", icon: Scale, color: "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" },
+  { title: "Limitation Act", icon: History, color: "bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400" }
+];
+
+interface ClauseResearchProps {
+  user?: User;
+  onSelectDraft?: (draft: Draft) => void;
+  onSaveLater?: (item: any) => void;
+}
+
+export default function ClauseResearch({ user, onSelectDraft, onSaveLater }: ClauseResearchProps) {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [recentDrafts, setRecentDrafts] = useState<Draft[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      api.drafts.list(user.id).then(data => setRecentDrafts(data.slice(0, 4)));
+    }
+  }, [user]);
+
+  const handleSearch = async (e?: React.FormEvent, overrideQuery?: string) => {
+    if (e) e.preventDefault();
+    const finalQuery = overrideQuery || query;
+    if (!finalQuery) return;
+    setLoading(true);
+    try {
+      const data = await researchLegalClauses(finalQuery);
+      setResults(data || null);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (!results) return;
+    navigator.clipboard.writeText(results);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSaveResult = () => {
+    if (!results || !onSaveLater) return;
+    onSaveLater({
+      id: `research-${Date.now()}`,
+      title: `Research: ${query}`,
+      content: results,
+      type: 'Research Result'
+    });
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-12">
+      {/* Top Search Bar & Header */}
+      <div className="flex flex-col gap-8 mb-12">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="max-w-xl">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-3 mb-4"
+            >
+              <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                Legal Intelligence
+              </span>
+            </motion.div>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-3xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white leading-tight"
+            >
+              Clause <span className="text-indigo-600 dark:text-indigo-400 italic">Research</span>
+            </motion.h1>
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex-1 max-w-2xl w-full"
+          >
+            <form onSubmit={handleSearch} className="relative group">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 group-focus-within:text-indigo-500 transition-colors" />
+              <input
+                type="text"
+                placeholder="Search legal clauses, topics or precedents..."
+                className="w-full pl-14 pr-32 py-4 glass rounded-2xl border-white/50 dark:border-white/10 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-base font-medium placeholder:text-slate-400 dark:placeholder:text-slate-600 dark:text-white"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button
+                type="submit"
+                disabled={loading || !query}
+                className="absolute right-2 top-2 bottom-2 bg-slate-900 dark:bg-white text-white dark:text-black px-6 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-slate-100 transition-all flex items-center gap-2 disabled:opacity-50 text-sm"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                <span>Research</span>
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Left Sidebar: Topics & History */}
+        <div className="lg:col-span-4 space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="glass p-8 rounded-[40px] border-white/50 dark:border-white/10"
+          >
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Quick Topics</p>
+            <div className="grid grid-cols-1 gap-3">
+              {QUICK_TOPICS.map((topic, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setQuery(topic.title);
+                    handleSearch(undefined, topic.title);
+                  }}
+                  className="flex items-center gap-4 p-4 bg-white/40 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 rounded-2xl border border-white/50 dark:border-white/10 transition-all text-left group"
+                >
+                  <div className={cn("p-2.5 rounded-xl transition-transform group-hover:scale-110", topic.color)}>
+                    <topic.icon className="w-5 h-5" />
+                  </div>
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-300">{topic.title}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+
+          {recentDrafts.length > 0 && (
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="glass p-8 rounded-[40px] border-white/50 dark:border-white/10"
+            >
+              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Contextual Research</p>
+              <div className="space-y-3">
+                {recentDrafts.map((draft) => (
+                  <button
+                    key={draft.id}
+                    onClick={() => {
+                      setQuery(`Analyze and suggest clauses for: ${draft.title}`);
+                      handleSearch(undefined, `Based on this draft title "${draft.title}", suggest 3 critical legal clauses that should be included.`);
+                    }}
+                    className="w-full flex items-center justify-between p-4 bg-white/40 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 rounded-2xl border border-white/50 dark:border-white/10 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-100 dark:bg-white/10 rounded-lg text-slate-500 dark:text-slate-400">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 truncate max-w-[150px]">{draft.title}</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Right Content: Results */}
+        <div className="lg:col-span-8">
+          <AnimatePresence mode="wait">
+            {loading ? (
+              <motion.div 
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center py-32 glass rounded-[40px] border-white/50 dark:border-white/10 h-full"
+              >
+                <div className="relative">
+                  <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-900/20 rounded-full flex items-center justify-center mb-8 animate-pulse">
+                    <Scale className="w-10 h-10 text-indigo-300" />
+                  </div>
+                  <div className="absolute inset-0 border-4 border-indigo-100 dark:border-indigo-900/30 border-t-indigo-500 rounded-full animate-spin" />
+                </div>
+                <p className="text-slate-500 dark:text-slate-400 text-lg font-serif italic animate-pulse">Consulting legal precedents...</p>
+              </motion.div>
+            ) : results ? (
+              <motion.div
+                key="results"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="glass rounded-[40px] border-white/50 dark:border-white/10 shadow-2xl shadow-black/5 overflow-hidden h-full flex flex-col"
+              >
+                <div className="p-8 border-b border-white/50 dark:border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white/30 dark:bg-black/40">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-indigo-600 text-white rounded-2xl shadow-xl shadow-indigo-600/20">
+                      <BookOpen className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-serif font-bold text-slate-900 dark:text-white">Research Findings</h2>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Found relevant clauses and citations</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleSaveResult}
+                      className="p-3 bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-all shadow-sm"
+                      title="Save to Collection"
+                    >
+                      <Bookmark className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={copyToClipboard}
+                      className="flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold text-sm hover:bg-slate-800 dark:hover:bg-slate-100 transition-all shadow-sm"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                      {copied ? 'Copied' : 'Copy All'}
+                    </button>
+                  </div>
+                </div>
+                <div className="p-8 md:p-12 bg-white/80 dark:bg-black/60 flex-1 overflow-y-auto custom-scrollbar">
+                  <div className="max-w-3xl mx-auto">
+                    <div className="markdown-body">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{results}</ReactMarkdown>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="glass rounded-[40px] border-white/50 dark:border-white/10 border-dashed py-32 text-center h-full flex flex-col items-center justify-center"
+              >
+                <div className="w-24 h-24 bg-slate-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-8">
+                  <Scale className="w-12 h-12 text-slate-200 dark:text-white/10" />
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-slate-400 dark:text-slate-600">Ready to Research</h3>
+                <p className="text-slate-400 dark:text-slate-500 mt-2 max-w-xs mx-auto">Enter a legal topic or select a quick topic from the sidebar to begin your research.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}

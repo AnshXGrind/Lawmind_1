@@ -1,0 +1,5 @@
+{
+  "name": "LawMind",
+  "description": "AI-powered legal drafting assistant for Indian lawyers. Generate petitions, contracts, and affidavits with IPC/CrPC suggestions.",
+  "requestFramePermissions": ["camera"]
+}
